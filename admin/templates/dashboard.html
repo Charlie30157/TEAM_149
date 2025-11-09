@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Admin Control Panel</title>
+  <style>
+    body { font-family: Arial; background:#101010; color:#eee; }
+    .container { width:90%; margin:12px auto; }
+    table { width:100%; border-collapse: collapse; margin-bottom:20px; }
+    th,td { padding:8px; border:1px solid #333; }
+    th { background:#1f1f1f; }
+    a.btn { padding:6px 8px; background:#00cc99; color:#000; text-decoration:none; border-radius:4px;}
+    .small { font-size:0.9em; color:#bbb; }
+    .flash { color:#ffcc00; }
+    form.inline { display:inline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Kafka Dynamic Stream — Admin Panel</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash">{{ messages[0] }}</div>
+      {% endif %}
+    {% endwith %}
+
+    <h2>Pending Topics</h2>
+    <table>
+      <tr><th>ID</th><th>Name</th><th>Action</th></tr>
+      {% for t in pending %}
+      <tr>
+        <td>{{ t.topic_id }}</td>
+        <td>{{ t.topic_name }}</td>
+        <td>
+          <a class="btn" href="/approve/{{ t.topic_id }}">Approve</a>
+          <a style="margin-left:6px" class="btn" href="/reject/{{ t.topic_id }}">Reject</a>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="3">No pending topics</td></tr>
+      {% endfor %}
+    </table>
+
+    <h2>Approved Topics</h2>
+    <table>
+      <tr><th>ID</th><th>Name</th><th>Status</th></tr>
+      {% for t in approved %}
+      <tr>
+        <td>{{ t.topic_id }}</td>
+        <td>{{ t.topic_name }}</td>
+        <td>{{ t.status }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="3">No approved topics</td></tr>
+      {% endfor %}
+    </table>
+
+    <h2>Rejected Topics</h2>
+    <table>
+      <tr><th>ID</th><th>Name</th></tr>
+      {% for t in rejected %}
+      <tr>
+        <td>{{ t.topic_id }}</td>
+        <td>{{ t.topic_name }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="2">No rejected topics</td></tr>
+      {% endfor %}
+    </table>
+
+    <h2>User Subscriptions</h2>
+    <table>
+      <tr><th>User</th><th>Topic</th></tr>
+      {% for s in subs %}
+      <tr>
+        <td>{{ s.user_name }}</td>
+        <td>{{ s.topic_name }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="2">No subscriptions</td></tr>
+      {% endfor %}
+    </table>
+
+    <!-- Create Topic section removed as requested -->
+
+  </div>
+</body>
+</html>
+
